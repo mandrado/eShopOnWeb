@@ -10,6 +10,7 @@ env:
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: 064fc043-12c7-4e15-8acf-aad71fbca82a
   WEBAPP-NAME: eshoponweb-webapp-az400m03l08
+  APPSERVICEPLAN-NAME: az400m03l08-sp1
 
 jobs:
   #Build, test and publish .net web project in repository
@@ -79,10 +80,11 @@ jobs:
       - name: deploy
         uses: azure/arm-deploy@v2
         with:
+          scope: resourcegroup
           subscriptionId: ${{ env.SUBSCRIPTION-ID }}
           resourceGroupName: ${{ env.RESOURCE-GROUP }}
           template: bicep-template/webapp.bicep
-          parameters: "webAppName=${{ env.WEBAPP-NAME }} location=${{ env.LOCATION }}"
+          parameters: "webAppName=${{ env.WEBAPP-NAME }} appServicePlanName=${{ env.APPSERVICEPLAN-NAME }} location=${{ env.LOCATION }}"
           failOnStdErr: false
 
       # Publish website to Azure App Service (WebApp)
